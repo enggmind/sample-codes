@@ -3,12 +3,12 @@ import xml.etree.ElementTree as ET
 import re
 import os
 import sys
-import demo_main_file as mf
+import ism_trello_utils as mf
 
-API_KEY     = os.environ("TRELLO_API_KEY")
-TOKEN       = os.environ("TRELLO_TOKEN")
-ORG_NAME    = os.environ("TRELLO_ORG_NAME")
-BOARD_NAME  = os.environ("TRELLO_BOARD_NAME")
+API_KEY     = os.environ.get("TRELLO_API_KEY")
+TOKEN       = os.environ.get("TRELLO_TOKEN")
+ORG_NAME    = os.environ.get("TRELLO_ORG_NAME")
+BOARD_NAME  = os.environ.get("TRELLO_BOARD_NAME")
 
 URL_PREFIX      = "https://build.isafe-mobile.com/job/"
 XML_FILE_PATH   = sys.argv[1]
@@ -79,9 +79,11 @@ CARD_NAME = PARAM_CUSTOMER + "-" + BUILD_NUM + "-" + PARAM_BASEBAND
 if PARAM_CUSTOM_PROFILE != "":
     CARD_NAME = CARD_NAME + "(" + PARAM_CUSTOM_PROFILE + ")"
 
+LIST_NAME = PARAM_CUSTOMER if (PARAM_CUSTOM_PROFILE == "" or PARAM_CUSTOM_PROFILE == PARAM_CUSTOMER) else PARAM_CUSTOMER + '-' + PARAM_CUSTOM_PROFILE
+
 JENKINS_URL = URL_PREFIX + JOB_NAME + "/" + BUILD_NUM + "/"
 
 mf.initialize(apikey=API_KEY, token=TOKEN, board_name=BOARD_NAME, org_name=ORG_NAME)
-mf.new_list(list_name=PARAM_CUSTOMER)
+mf.new_list(list_name=LIST_NAME)
 mf.new_card(card_name=CARD_NAME, list_name=PARAM_CUSTOMER, desc=PARAM_DESCRIPTION)
 mf.add_comment(card_name=CARD_NAME, comment=JENKINS_URL)

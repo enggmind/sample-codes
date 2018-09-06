@@ -1,8 +1,19 @@
 import requests
 import json
+import os
 
 API_KEY=""
 TOKEN=""
+BOARD_NAME="RG310"
+ORG_NAME="isafemobile1"
+
+PARAM_CUSTOMER          = os.environ.get("PARAM_CUSTOMER")
+PARAM_CUSTOM_PROFILE    = os.environ.get("PARAM_CUSTOM_PROFILE")
+PARAM_BASEBAND          = os.environ.get("PARAM_BASEBAND")
+PARAM_DESCRIPTION       = os.environ.get("PARAM_DESCRIPTION")
+BUILD_NUMBER            = os.environ.get("BUILD_NUMBER")
+JENKINS_URL             = os.environ.get("JENKINS_URL")
+
 board_id=""
 list_id=""
 
@@ -82,6 +93,7 @@ def isCexist(card_name):
 	    return False
 	except:
             print("isCexist: operation failed")
+            print resp.content
             exit(1)
 		
 
@@ -132,7 +144,6 @@ def new_card(card_name, list_name, desc=None):
 	    resp = requests.post("https://api.trello.com/1/cards" % (), params=dict(key=API_KEY, token=TOKEN, idList=list_id), data=dict(pos="top", desc=desc, name=card_name))
 	    resp.raise_for_status()
 	    json.loads(resp.content)
-	 
 	  else:
 	    return
 	except:
@@ -151,8 +162,13 @@ def delete_card(card_name, list_name):
             print("delete_card: operation failed")
 	    exit(1)
 
-mf.initialize(apikey=API_KEY, token=TOKEN, board_name=BOARD_NAME, org_name=ORG_NAME)
-mf.new_list(list_name=LIST_NAME)
-mf.new_card(card_name=CARD_NAME, list_name=PARAM_CUSTOMER, desc=PARAM_DESCRIPTION)
-mf.add_comment(card_name=CARD_NAME, comment=JENKINS_URL)
-~                                                           
+CARD_NAME = PARAM_CUSTOMER + "-" + BUILD_NUMBER + "-" + PARAM_BASEBAND
+if PARAM_CUSTOM_PROFILE != "":
+    CARD_NAME = CARD_NAME + "(" + PARAM_CUSTOM_PROFILE + ")"
+
+LIST_NAME = PARAM_CUSTOMER if (PARAM_CUSTOM_PROFILE == "" or PARAM_CUSTOM_PROFILE == PARAM_CUSTOMER) else PARAM_CUSTOMER + '-' + PARAM_CUSTOM_PROFILE
+
+initialize(apikey=API_KEY, token=TOKEN, board_name=BOARD_NAME, org_name=ORG_NAME)
+new_list(list_name=LIST_NAME)
+new_card(card_name=CARD_NAME, list_name=LIST_NAME, desc=PARAM_DESCRIPTION)
+add_comment(card_name=CARD_NAME, comment=JENKINS_URL)

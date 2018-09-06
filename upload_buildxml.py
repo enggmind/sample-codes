@@ -85,5 +85,5 @@ JENKINS_URL = URL_PREFIX + JOB_NAME + "/" + BUILD_NUM + "/"
 
 mf.initialize(apikey=API_KEY, token=TOKEN, board_name=BOARD_NAME, org_name=ORG_NAME)
 mf.new_list(list_name=LIST_NAME)
-mf.new_card(card_name=CARD_NAME, list_name=PARAM_CUSTOMER, desc=PARAM_DESCRIPTION)
+mf.new_card(card_name=CARD_NAME, list_name=LIST_NAME, desc=PARAM_DESCRIPTION)
 mf.add_comment(card_name=CARD_NAME, comment=JENKINS_URL)

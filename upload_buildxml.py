@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import re
 import os
 import sys
-import ism_trello_utils as mf
+import trello_lib_ism
 
 API_KEY     = os.environ.get("TRELLO_API_KEY")
 TOKEN       = os.environ.get("TRELLO_TOKEN")
@@ -83,7 +83,6 @@ LIST_NAME = PARAM_CUSTOMER if (PARAM_CUSTOM_PROFILE == "" or PARAM_CUSTOM_PROFIL
 
 JENKINS_URL = URL_PREFIX + JOB_NAME + "/" + BUILD_NUM + "/"
 
-mf.initialize(apikey=API_KEY, token=TOKEN, board_name=BOARD_NAME, org_name=ORG_NAME)
-mf.new_list(list_name=LIST_NAME)
-mf.new_card(card_name=CARD_NAME, list_name=LIST_NAME, desc=PARAM_DESCRIPTION)
-mf.add_comment(card_name=CARD_NAME, comment=JENKINS_URL)
+trello = trello_lib_ism.TrelloUpdate(apikey=API_KEY, token=TOKEN, board_name=BOARD_NAME, org_name=ORG_NAME, list_name=LIST_NAME)
+trello.new_card(card_name=CARD_NAME, desc=PARAM_DESCRIPTION)
+trello.add_comment(card_name=CARD_NAME, comment=JENKINS_URL)

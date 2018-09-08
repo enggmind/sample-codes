@@ -1,0 +1,2 @@
+mkdir -p `python -m site --user-site`
+android@build:~/.local/lib/python2.7/site-packages

@@ -1,3 +1,4 @@
+#reqire lot of customization
 for i in {0..65..1}
 do
     if [ -f ./kk310/$i/build.xml ]; then

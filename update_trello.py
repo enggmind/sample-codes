@@ -1,5 +1,3 @@
-import requests
-import json
 import os
 import trello_lib_ism
 
